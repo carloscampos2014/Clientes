@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -9,6 +9,8 @@ import Grid from '@material-ui/core/Grid';
 import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from 'react-router';
+import api from '../services/Api'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -19,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundRepeat: 'no-repeat',
         backgroundColor:
             theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
-        backgroundSize: 'cover',
+        backgroundSize: 'auto',
         backgroundPosition: 'center',
     },
     paper: {
@@ -43,7 +45,44 @@ const useStyles = makeStyles((theme) => ({
 
 const Login = () => {
     const classes = useStyles();
+    let history = useHistory();
+    const [values, setValues] = useState({
+        name: '',
+        email: '',
+        password: ''
+    });
 
+    const handleChange = (event: any) => {
+        event.persist();
+        setValues({
+            ...values,
+            [event.target.name]:
+                event.target.type === 'checkbox'
+                    ? event.target.checked
+                    : event.target.value
+        });
+    };
+
+
+    const handleSubmit = async (event: any) => {
+        event.preventDefault();
+
+        try {
+            const response = await api.post(`/users/login`, {
+                email: values.email,
+                password: values.password,
+            });
+
+
+            console.log(response.data, response.data._id);
+
+            history.push(`/`);
+
+        } catch (err) {
+            alert("Houve um erro com a sua operação!");
+        }
+
+    };
     return (
         <Grid container component="main" className={classes.root}>
             <CssBaseline />
@@ -56,7 +95,7 @@ const Login = () => {
                     <Typography component="h1" variant="h5">
                         Entrar
                     </Typography>
-                    <form className={classes.form} noValidate>
+                    <form className={classes.form} noValidate onSubmit={handleSubmit}>
                         <TextField
                             variant="outlined"
                             margin="normal"
@@ -66,6 +105,8 @@ const Login = () => {
                             label="Email Address"
                             name="email"
                             autoComplete="email"
+                            value={values.email}
+                            onChange={handleChange}
                             autoFocus
                         />
                         <TextField
@@ -77,6 +118,8 @@ const Login = () => {
                             label="Password"
                             type="password"
                             id="password"
+                            value={values.password}
+                            onChange={handleChange}
                             autoComplete="current-password"
                         />
                         <Button

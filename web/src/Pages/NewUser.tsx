@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -9,6 +9,8 @@ import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { useHistory } from 'react-router';
+import api from '../services/Api'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -33,72 +35,119 @@ const useStyles = makeStyles((theme) => ({
 
 const NewUser = () => {
     const classes = useStyles();
-    return (<Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <div className={classes.paper}>
-            <Avatar className={classes.avatar}>
-                <AccountCircleRoundedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-                Cadastrar
-            </Typography>
-            <form className={classes.form} noValidate>
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <TextField
-                            autoComplete="name"
-                            name="name"
-                            variant="outlined"
-                            required
-                            fullWidth
-                            id="name"
-                            label="Nome"
-                            autoFocus
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            variant="outlined"
-                            required
-                            fullWidth
-                            id="email"
-                            label="E-mail"
-                            name="email"
-                            autoComplete="email"
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            variant="outlined"
-                            required
-                            fullWidth
-                            name="password"
-                            label="Senha"
-                            type="password"
-                            id="password"
-                            autoComplete="current-password"
-                        />
-                    </Grid>
-                </Grid>
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}
-                >
+    let history = useHistory();
+    const [values, setValues] = useState({
+        name: '',
+        email: '',
+        password: ''
+    });
+
+    const handleChange = (event: any) => {
+        event.persist();
+        setValues({
+            ...values,
+            [event.target.name]:
+                event.target.type === 'checkbox'
+                    ? event.target.checked
+                    : event.target.value
+        });
+    };
+
+
+    const handleSubmit = async (event: any) => {
+        event.preventDefault();
+
+        try {
+            const response = await api.post(`/users/`, {
+                name: values.name,
+                email: values.email,
+                password: values.password,
+            });
+
+
+            console.log(response.data, response.data._id);
+
+            history.push(`/`);
+
+        } catch (err) {
+            alert("Houve um erro com a sua operação!");
+        }
+
+    };
+
+    return (
+        <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <div className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                    <AccountCircleRoundedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
                     Cadastrar
-                </Button>
-                <Grid container justify="flex-end">
-                    <Grid item>
-                        <Link href="/" variant="body2">
-                            Voce já tem um conta? Entrar
-                        </Link>
+            </Typography>
+                <form className={classes.form} noValidate onSubmit={handleSubmit}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <TextField
+                                autoComplete="name"
+                                name="name"
+                                variant="outlined"
+                                required
+                                fullWidth
+                                id="name"
+                                value={values.name}
+                                onChange={handleChange}
+                                label="Nome"
+                                autoFocus
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                variant="outlined"
+                                required
+                                fullWidth
+                                id="email"
+                                label="E-mail"
+                                name="email"
+                                value={values.email}
+                                onChange={handleChange}
+                                autoComplete="email"
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                variant="outlined"
+                                required
+                                fullWidth
+                                name="password"
+                                label="Senha"
+                                type="password"
+                                id="password"
+                                value={values.password}
+                                onChange={handleChange}
+                                autoComplete="current-password"
+                            />
+                        </Grid>
                     </Grid>
-                </Grid>
-            </form>
-        </div>
-    </Container>
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                    >
+                        Cadastrar
+                    </Button>
+                    <Grid container justify="flex-end">
+                        <Grid item>
+                            <Link href="/" variant="body2">
+                                Voce já tem um conta? Entrar
+                        </Link>
+                        </Grid>
+                    </Grid>
+                </form>
+            </div>
+        </Container>
     );
 }
 

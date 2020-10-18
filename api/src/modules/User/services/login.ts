@@ -1,6 +1,7 @@
 import { getRepository } from "typeorm";
 import User from '../models/User';
 import { Request, Response } from "express";
+import OneUser from '../views/OneUser';
 
 const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
@@ -21,7 +22,7 @@ const login = async (req: Request, res: Response) => {
     const users = await repository.find({
         where: { email: email, password: password }
     });
-    if (users.length > 0) return res.status(200).json(users[0]);
+    if (users.length > 0) return res.status(200).json(OneUser.render(users[0]));
     else return res.status(400).json({ error: true, message: "Usuário/Senha Invalido!" });
 }
 
