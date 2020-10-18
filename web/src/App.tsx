@@ -1,14 +1,9 @@
 import React from 'react';
+import Routes from './Routes'
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Aplicativo Clientes Inicio
-        </p>
-      </header>
-    </div>
+    <Routes />
   );
 }
 
