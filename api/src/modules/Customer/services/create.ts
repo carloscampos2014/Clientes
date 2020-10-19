@@ -18,6 +18,7 @@ const create = async (req: Request, res: Response) => {
     state,
     country,
     obs,
+    user_id,
   } = req.body;
 
   const repository = getRepository(Customer);
@@ -30,14 +31,14 @@ const create = async (req: Request, res: Response) => {
       .required("E-mail é Obrigarorio!")
       .email("E-mail Invalido!"),
     cellphone: Yup.string().required("Numero do Celular é Obrigatorio!"),
-    phone: Yup.string().required("Numero do Celular é Obrigatorio!"),
-    zipcode: Yup.string().required("Numero do Celular é Obrigatorio!"),
-    number: Yup.string().required("Numero do Celular é Obrigatorio!"),
-    address: Yup.string().required("Numero do Celular é Obrigatorio!"),
-    district: Yup.string().required("Numero do Celular é Obrigatorio!"),
-    city: Yup.string().required("Numero do Celular é Obrigatorio!"),
-    state: Yup.string().required("Numero do Celular é Obrigatorio!"),
-    country: Yup.string().required("Numero do Celular é Obrigatorio!"),
+    phone: Yup.string().required("Numero do Telefone é Obrigatorio!"),
+    zipcode: Yup.string().required("Numero do CEP é Obrigatorio!"),
+    number: Yup.string().required("Numero do Endereço é Obrigatorio!"),
+    address: Yup.string().required("Logradouro é Obrigatorio!"),
+    district: Yup.string().required("Bairro é Obrigatorio!"),
+    city: Yup.string().required("Municipio Obrigatorio!"),
+    state: Yup.string().required("UF é Obrigatorio!"),
+    country: Yup.string().required("País é Obrigatorio!"),
   });
 
   const data = {
@@ -54,6 +55,7 @@ const create = async (req: Request, res: Response) => {
     state,
     country,
     obs,
+    user_id,
   };
 
   await schema.validate(data, {
