@@ -6,12 +6,14 @@ import "express-async-errors";
 import errorHandler from "./errors/handler";
 import "./database/connection";
 import routesUser from "./modules/User/http/Routes";
+import routesCustomer from "./modules/Customer/http/Routes";
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use(routesUser);
+app.use(routesCustomer);
 app.use(errorHandler);
 
 app.listen(3333, () => console.log("BackEnd Started in http://localhost:3333"));

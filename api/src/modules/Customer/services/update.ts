@@ -20,6 +20,7 @@ const update = async (req: Request, res: Response) => {
     state,
     country,
     obs,
+    user_id,
   } = req.body;
 
   const repository = getRepository(Customer);
@@ -49,13 +50,14 @@ const update = async (req: Request, res: Response) => {
     phone,
     zipcode,
     number,
-    complement,
+    complement: complement ? "" : complement,
     address,
     district,
     city,
     state,
     country,
-    obs,
+    obs: obs ? "" : obs,
+    user_id,
   };
 
   await schema.validate(data, {

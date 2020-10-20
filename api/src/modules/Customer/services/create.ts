@@ -11,16 +11,17 @@ const create = async (req: Request, res: Response) => {
     phone,
     zipcode,
     number,
-    complement,
     address,
     district,
     city,
     state,
     country,
-    obs,
     user_id,
   } = req.body;
+  let { complement, obs } = req.body;
 
+  complement = complement ? "" : complement;
+  obs = obs ? "SEM OBSERVAÇÃO" : obs;
   const repository = getRepository(Customer);
 
   const schema = Yup.object().shape({

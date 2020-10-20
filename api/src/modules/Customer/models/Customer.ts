@@ -9,6 +9,9 @@ import User from "../../User/models/User";
 
 @Entity("customers")
 export default class Customer {
+  @Column()
+  user_id: string;
+
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
