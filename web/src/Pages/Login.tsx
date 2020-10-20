@@ -72,14 +72,12 @@ const Login = () => {
                 email: values.email,
                 password: values.password,
             });
-
-
-            console.log(response.data, response.data._id);
-
-            history.push(`/`);
+            sessionStorage.setItem("@EZBCLIENTES",JSON.stringify(response.data));
+            history.push(`/dashboard`);
 
         } catch (err) {
             alert("Houve um erro com a sua operação!");
+            sessionStorage.removeItem("@EZBCLIENTES");
         }
 
     };
